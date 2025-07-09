@@ -29,7 +29,7 @@ setup(
     description="A human-friendly explainability (XAI) library for machine learning models",
     long_description=read_readme(),
     long_description_content_type="text/markdown",
-    url="https://github.com/explainit/explainit",
+    url="https://github.com/RodrigoNPereira/explainit",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 3 - Alpha",
@@ -69,8 +69,8 @@ setup(
     zip_safe=False,
     keywords="machine-learning explainability xai shap lime visualization reporting",
     project_urls={
-        "Bug Reports": "https://github.com/explainit/explainit/issues",
-        "Source": "https://github.com/explainit/explainit",
-        "Documentation": "https://explainit.readthedocs.io/",
+        "Bug Reports": "https://github.com/RodrigoNPereira/explainit/issues",
+        "Source": "https://github.com/RodrigoNPereira/explainit",
+        # "Documentation": "https://explainit.readthedocs.io/",
     },
 ) 

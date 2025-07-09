@@ -9,6 +9,7 @@ import os
 import datetime
 from typing import Dict, Any, Optional, List
 import warnings
+import numpy as np
 
 try:
     from reportlab.lib.pagesizes import letter, A4
@@ -52,7 +53,7 @@ class Reporter:
             global_explanation: Global explanation dictionary
             local_explanations: Dictionary of local explanations
             filename: Output filename
-            format: Output format ("pdf", "html")
+            format: Output format ("pdf", "html", "markdown")
             title: Report title
             **kwargs: Additional report arguments
             
@@ -65,6 +66,10 @@ class Reporter:
             )
         elif format.lower() == "html":
             return self._export_html_report(
+                global_explanation, local_explanations, filename, title, **kwargs
+            )
+        elif format.lower() == "markdown":
+            return self._export_markdown_report(
                 global_explanation, local_explanations, filename, title, **kwargs
             )
         else:
@@ -228,16 +233,18 @@ class Reporter:
         """
         
         if feature_importances:
+            # Ensure all importances are float scalars
             sorted_features = sorted(
-                feature_importances.items(), 
-                key=lambda x: x[1], 
+                [
+                    (feature, float(np.ravel(importance)[0]))
+                    for feature, importance in feature_importances.items()
+                ],
+                key=lambda x: x[1],
                 reverse=True
             )
-            
             text += " The feature importance analysis shows that:"
             for i, (feature, importance) in enumerate(sorted_features[:5]):
                 text += f" '{feature}' has an importance score of {importance:.3f},"
-            
             text = text.rstrip(',') + "."
         
         return text.strip()
@@ -255,17 +262,19 @@ class Reporter:
         """
         
         if feature_contributions:
+            # Ensure all contributions are float scalars
             sorted_contributions = sorted(
-                feature_contributions.items(), 
-                key=lambda x: abs(x[1]), 
+                [
+                    (feature, float(np.ravel(contribution)[0]))
+                    for feature, contribution in feature_contributions.items()
+                ],
+                key=lambda x: abs(x[1]),
                 reverse=True
             )
-            
             text += " The top contributing features are:"
             for feature, contribution in sorted_contributions[:3]:
                 direction = "positively" if contribution > 0 else "negatively"
                 text += f" '{feature}' contributed {direction} ({contribution:.3f}),"
-            
             text = text.rstrip(',') + "."
         
         return text.strip()
@@ -303,13 +312,15 @@ class Reporter:
         # Sort features by importance
         sorted_features = sorted(
             feature_importances.items(), 
-            key=lambda x: x[1], 
+            key=lambda x: float(np.ravel(x[1])[0]) if hasattr(x[1], '__iter__') else float(x[1]), 
             reverse=True
         )[:10]  # Top 10 features
         
         # Add feature data
         for i, (feature, importance) in enumerate(sorted_features, 1):
-            table_data.append([str(i), feature, f"{importance:.4f}"])
+            # Ensure importance is a scalar for formatting
+            importance_scalar = float(np.ravel(importance)[0]) if hasattr(importance, '__iter__') else float(importance)
+            table_data.append([str(i), feature, f"{importance_scalar:.4f}"])
         
         return table_data
     
@@ -431,6 +442,105 @@ class Reporter:
         
         return html
     
+    def _export_markdown_report(
+        self,
+        global_explanation: Dict[str, Any],
+        local_explanations: Dict[int, Dict[str, Any]],
+        filename: str,
+        title: str,
+        **kwargs
+    ) -> str:
+        """Export report as Markdown."""
+        # Ensure filename has .md extension
+        if not filename.endswith('.md'):
+            filename += '.md'
+        
+        # Generate Markdown content
+        markdown_content = self._generate_markdown_content(
+            global_explanation, local_explanations, title
+        )
+        
+        # Write to file
+        with open(filename, 'w', encoding='utf-8') as f:
+            f.write(markdown_content)
+        
+        print(f"Markdown report saved to: {filename}")
+        return filename
+    
+    def _generate_markdown_content(
+        self,
+        global_explanation: Dict[str, Any],
+        local_explanations: Dict[int, Dict[str, Any]],
+        title: str
+    ) -> str:
+        """Generate complete Markdown content."""
+        timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        
+        markdown = f"""# {title}
+
+*Generated on: {timestamp}*
+
+## Executive Summary
+
+{self._generate_executive_summary(global_explanation)}
+
+## Global Model Explanation
+
+{self._generate_global_explanation_text(global_explanation)}
+
+{self._generate_markdown_feature_table(global_explanation)}
+
+{self._generate_markdown_local_explanations(local_explanations)}
+
+## Methodology
+
+{self._generate_methodology_text(global_explanation)}
+"""
+        
+        return markdown
+    
+    def _generate_markdown_feature_table(self, global_explanation: Dict[str, Any]) -> str:
+        """Generate Markdown table for feature importances."""
+        feature_importances = global_explanation.get("feature_importances", {})
+        
+        if not feature_importances:
+            return ""
+        
+        # Sort features by importance
+        sorted_features = sorted(
+            [
+                (feature, float(np.ravel(importance)[0]))
+                for feature, importance in feature_importances.items()
+            ],
+            key=lambda x: x[1],
+            reverse=True
+        )[:10]  # Top 10 features
+        
+        markdown = """
+## Top Feature Importances
+
+| Rank | Feature | Importance |
+|------|---------|------------|
+"""
+        
+        for i, (feature, importance) in enumerate(sorted_features, 1):
+            markdown += f"| {i} | {feature} | {importance:.4f} |\n"
+        
+        return markdown
+    
+    def _generate_markdown_local_explanations(self, local_explanations: Dict[int, Dict[str, Any]]) -> str:
+        """Generate Markdown for local explanations."""
+        if not local_explanations:
+            return ""
+        
+        markdown = "\n## Local Explanations\n\n"
+        
+        for sample_idx, local_exp in list(local_explanations.items())[:5]:  # Limit to first 5
+            markdown += f"### Sample {sample_idx}\n\n"
+            markdown += f"{self._generate_local_explanation_text(local_exp)}\n\n"
+        
+        return markdown
+    
     def _generate_html_feature_table(self, global_explanation: Dict[str, Any]) -> str:
         """Generate HTML table for feature importances."""
         feature_importances = global_explanation.get("feature_importances", {})
@@ -440,8 +550,11 @@ class Reporter:
         
         # Sort features by importance
         sorted_features = sorted(
-            feature_importances.items(), 
-            key=lambda x: x[1], 
+            [
+                (feature, float(np.ravel(importance)[0]))
+                for feature, importance in feature_importances.items()
+            ],
+            key=lambda x: x[1],
             reverse=True
         )[:10]  # Top 10 features
         

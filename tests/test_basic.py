@@ -9,6 +9,10 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split
 
+# Set matplotlib to use non-GUI backend for testing
+import matplotlib
+matplotlib.use('Agg')
+
 from explainit import ExplainIt
 
 
@@ -227,6 +231,32 @@ class TestVisualizer:
 
 class TestReporter:
     """Test cases for Reporter class."""
+    
+    @pytest.fixture
+    def sample_data(self):
+        """Create sample data for testing."""
+        X, y = make_classification(
+            n_samples=100, 
+            n_features=10, 
+            n_informative=5, 
+            n_redundant=2, 
+            random_state=42
+        )
+        feature_names = [f"feature_{i}" for i in range(X.shape[1])]
+        return X, y, feature_names
+    
+    @pytest.fixture
+    def trained_model(self, sample_data):
+        """Create a trained model for testing."""
+        X, y, _ = sample_data
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=0.3, random_state=42
+        )
+        
+        model = RandomForestClassifier(n_estimators=10, random_state=42)
+        model.fit(X_train, y_train)
+        
+        return model, X_test, y_test
     
     def test_reporter_initialization(self):
         """Test Reporter initialization."""

@@ -15,7 +15,7 @@ Unlike SHAP, LIME, or ELI5, which expose technical internals, `ExplainIt` focuse
 
 ## 🚀 Quick Start
 
-### Installation
+<!-- ### Installation
 
 ```bash
 pip install explainit
@@ -24,7 +24,7 @@ pip install explainit
 For full functionality (PDF reports, LIME explanations):
 ```bash
 pip install explainit[full]
-```
+``` -->
 
 ### Basic Usage
 
@@ -208,7 +208,7 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 ### Development Setup
 
 ```bash
-git clone https://github.com/explainit/explainit.git
+git clone https://github.com/RodrigoNPereira/explainit.git
 cd explainit
 pip install -e .[dev]
 ```
@@ -225,10 +225,78 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- 📧 Email: contact@explainit.ai
-- 🐛 Issues: [GitHub Issues](https://github.com/explainit/explainit/issues)
-- 📖 Documentation: [Read the Docs](https://explainit.readthedocs.io/)
+- 📧 Email: rodrigonpgmae@gmail.com
+- 🐛 Issues: [GitHub Issues](https://github.com/RodrigoNPereira/explainit/issues)
+<!-- - 📖 Documentation: [Read the Docs](https://explainit.readthedocs.io/) -->
 
 ---
 
 **Made with ❤️ for the ML community** 
+
+## 🚦 How to Use the ExplainIt Dashboard
+
+### 1. **About the Dashboard Example**
+
+The file `examples/dashboard_example.py` is a demonstration script. When you run it with:
+
+```bash
+python examples/dashboard_example.py
+```
+
+it will print information to the terminal and generate a file called `dashboard_script.py`. **It does NOT launch the interactive dashboard in your browser.**
+
+---
+
+### 2. **How to Launch the Interactive Dashboard**
+
+To use the full interactive ExplainIt Dashboard:
+
+1. **Locate the generated file:**
+   - After running the example, you will see a file called `dashboard_script.py` in your project directory.
+
+2. **Run the dashboard with Streamlit:**
+   ```bash
+   streamlit run dashboard_script.py
+   ```
+
+3. **What happens next:**
+   - This command will start a local web server and open a new tab in your browser (usually at http://localhost:8501).
+   - You will see the full ExplainIt Dashboard, including sidebar controls, tabs (Overview, Global Analysis, Local Analysis, Reports), and interactive visualizations.
+
+---
+
+### 3. **Why This Is Necessary**
+
+- **Streamlit** is a special tool for building web apps in Python. It only renders UI elements (like buttons, tabs, and dataframes) when you run a script using the `streamlit run` command.
+- If you run a script with `python script.py`, it will only execute as a normal Python script and not as a web app.
+
+---
+
+### 4. **Summary Table**
+
+| Script                | How to Run                        | What You See                                 |
+|-----------------------|-----------------------------------|----------------------------------------------|
+| `dashboard_example.py`| `python dashboard_example.py`     | Terminal output, generates dashboard_script.py|
+| `dashboard_script.py` | `streamlit run dashboard_script.py`| Full interactive dashboard in your browser   |
+
+---
+
+### 5. **Next Steps**
+
+1. **Make sure you have Streamlit installed:**
+   ```bash
+   pip install streamlit
+   ```
+
+2. **Run the dashboard:**
+   ```bash
+   streamlit run dashboard_script.py
+   ```
+
+3. **Enjoy the interactive ExplainIt Dashboard in your browser!**
+
+---
+
+**If you want, you can also copy the contents of `dashboard_script.py` into your own file and run it with Streamlit.**
+
+If you need help, see the examples in the `examples/` directory or ask for support! 

@@ -8,7 +8,7 @@ model behavior, focusing on simplicity and communication with non-technical stak
 from .explainer import ExplainIt
 
 __version__ = "0.1.0"
-__author__ = "ExplainIt Team"
-__email__ = "contact@explainit.ai"
+__author__ = "RodrigoNPereira"
+__email__ = "rodrigonpgmae@gmail.com"
 
 __all__ = ["ExplainIt"] 
