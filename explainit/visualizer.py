@@ -74,7 +74,7 @@ class Visualizer:
         # Sort features by importance
         sorted_features = sorted(
             feature_importances.items(), 
-            key=lambda x: x[1], 
+            key=lambda x: float(np.ravel(x[1])[0]) if hasattr(x[1], '__iter__') else float(x[1]), 
             reverse=True
         )[:top_n]
         
@@ -136,11 +136,12 @@ class Visualizer:
         # Sort features by absolute contribution
         sorted_features = sorted(
             feature_contributions.items(), 
-            key=lambda x: abs(x[1]), 
+            key=lambda x: float(np.ravel(x[1])[0]) if hasattr(x[1], '__iter__') else float(x[1]), 
             reverse=True
         )[:top_n]
         
         features, contributions = zip(*sorted_features)
+        contributions = [float(np.ravel(c)[0]) if hasattr(c, '__iter__') else float(c) for c in contributions]
         
         # Create figure with subplots
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=figsize, height_ratios=[1, 2])
