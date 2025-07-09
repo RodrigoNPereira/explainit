@@ -144,13 +144,40 @@ explainer.export_report("model_analysis.pdf", format="pdf")
 explainer.export_report("model_analysis.html", format="html")
 ```
 
-## 🔧 Supported Models
+## 🔧 Supported Model Types
 
-- **scikit-learn**: All estimators with `predict` method
-- **XGBoost**: XGBClassifier, XGBRegressor
-- **LightGBM**: LGBMClassifier, LGBMRegressor
-- **CatBoost**: CatBoostClassifier, CatBoostRegressor
-- **Custom models**: Any model with `predict` method
+ExplainIt is designed to work out-of-the-box with the most popular machine learning libraries in Python. You can use ExplainIt with:
+
+### **Supported Model Types**
+
+- **scikit-learn**
+  - All classifiers and regressors that implement the `predict` method
+  - Examples: `RandomForestClassifier`, `LogisticRegression`, `GradientBoostingRegressor`, `DecisionTreeClassifier`, etc.
+
+- **XGBoost**
+  - `XGBClassifier`
+  - `XGBRegressor`
+
+- **LightGBM**
+  - `LGBMClassifier`
+  - `LGBMRegressor`
+
+- **CatBoost**
+  - `CatBoostClassifier`
+  - `CatBoostRegressor`
+
+- **Custom Models**
+  - Any model that implements a `predict` method and (optionally) `predict_proba` for probability outputs
+
+### **Requirements**
+
+- For XGBoost, LightGBM, or CatBoost support, you must have those libraries installed in your environment.
+- For scikit-learn, any estimator that follows the standard API will work.
+
+### **Not Supported (yet)**
+- Deep learning models (TensorFlow, PyTorch) are not natively supported, but support is planned for future releases.
+
+**If you need support for a specific model type, open an issue or request it!**
 
 ## 🛠️ Advanced Usage
 
@@ -231,7 +258,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Made with ❤️ for the ML community** 
 
 ## 🚦 How to Use the ExplainIt Dashboard
 
@@ -300,3 +326,5 @@ To use the full interactive ExplainIt Dashboard:
 **If you want, you can also copy the contents of `dashboard_script.py` into your own file and run it with Streamlit.**
 
 If you need help, see the examples in the `examples/` directory or ask for support! 
+
+**Made with ❤️ for the ML community** 
