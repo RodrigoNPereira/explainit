@@ -228,36 +228,6 @@ pip install explainit[dev]
 pytest tests/
 ```
 
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
-
-### Development Setup
-
-```bash
-git clone https://github.com/RodrigoNPereira/explainit.git
-cd explainit
-pip install -e .[dev]
-```
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- [SHAP](https://github.com/slundberg/shap) for the core explanation algorithms
-- [LIME](https://github.com/marcotcr/lime) for local explanations
-- [scikit-learn](https://scikit-learn.org/) for the machine learning foundation
-
-## 📞 Support
-
-- 📧 Email: rodrigonpgmae@gmail.com
-- 🐛 Issues: [GitHub Issues](https://github.com/RodrigoNPereira/explainit/issues)
-<!-- - 📖 Documentation: [Read the Docs](https://explainit.readthedocs.io/) -->
-
----
-
 
 ## 🚦 How to Use the ExplainIt Dashboard
 
@@ -326,5 +296,34 @@ To use the full interactive ExplainIt Dashboard:
 **If you want, you can also copy the contents of `dashboard_script.py` into your own file and run it with Streamlit.**
 
 If you need help, see the examples in the `examples/` directory or ask for support! 
+
+## 🤝 Contributing
+
+Contributions are all welcome! 
+<!-- Please see our [Contributing Guide](CONTRIBUTING.md) for details. -->
+
+### Development Setup
+
+```bash
+git clone https://github.com/RodrigoNPereira/explainit.git
+cd explainit
+pip install -e .[dev]
+```
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [SHAP](https://github.com/slundberg/shap) for the core explanation algorithms
+- [LIME](https://github.com/marcotcr/lime) for local explanations
+- [scikit-learn](https://scikit-learn.org/) for the machine learning foundation
+
+## 📞 Support
+
+- 📧 Email: rodrigonpgmae@gmail.com
+- 🐛 Issues: [GitHub Issues](https://github.com/RodrigoNPereira/explainit/issues)
+<!-- - 📖 Documentation: [Read the Docs](https://explainit.readthedocs.io/) -->
 
 **Made with ❤️ for the ML community** 
